@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class PessoaController {

@@ -21,6 +21,7 @@ public class Pessoa implements Domain {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
+    @JsonIgnore
     @Override
     public boolean isNew() {
         return getId() == null;
