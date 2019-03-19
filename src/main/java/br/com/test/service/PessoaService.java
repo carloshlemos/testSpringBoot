@@ -13,6 +13,7 @@ import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,6 +47,10 @@ public class PessoaService extends CustomSpecification<Pessoa> {
     @Transactional(readOnly = false, rollbackFor = RuntimeException.class)
     public Pessoa update(final Pessoa pessoa) {
         return repository.save(pessoa);
+    }
+
+    public List<Pessoa> listarTodos() {
+        return repository.findAll();
     }
 
     public Page<Pessoa> listarPaginado(Map<String, String> filters, Pageable pageable) {
