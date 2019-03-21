@@ -10,20 +10,27 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CustomSpecification<E> {
+public class CustomSpecification<T> {
 
     public static final String PROPERTY_NOT_FOUND = "property-not-found";
     private static final String FIELD_SEPARATOR = ".";
     private static final String REGEX_FIELD_SPLITTER = "\\.";
     private static final String FILTER_RESERVS[] = {"page", "size", "sort"};
 
-    private Class<E> entityBeanType;
+    private Class<T> entityBeanType;
 
     public CustomSpecification() {
-        this.entityBeanType = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        if (entityBeanType == null) {
+            try {
+                entityBeanType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+                        .getActualTypeArguments()[0];
+            } catch (Exception e) {
+                throw new RuntimeException("EntityBeanType deve ser informado !");
+            }
+        }
     }
 
-    public Specification<E> filterWithOptions(final Map<String, String> params) {
+    public Specification<T> filterWithOptions(final Map<String, String> params) {
         return (root, query, criteriaBuilder) -> {
             try {
                 List<Predicate> predicates = new ArrayList<>();
@@ -53,7 +60,7 @@ public class CustomSpecification<E> {
         };
     }
 
-    private void filterInDepth(Map<String, String> params, Root<E> root, CriteriaBuilder criteriaBuilder,
+    private void filterInDepth(Map<String, String> params, Root<T> root, CriteriaBuilder criteriaBuilder,
                                       List<Predicate> predicates, String field) throws NoSuchFieldException {
         String[] compositeField = field.split(REGEX_FIELD_SPLITTER);
         if (compositeField.length == 2) {
@@ -66,7 +73,7 @@ public class CustomSpecification<E> {
         }
     }
 
-    protected Class<E> getEntityBeanType() {
+    protected Class<T> getEntityBeanType() {
         return entityBeanType;
     }
 

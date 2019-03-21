@@ -25,9 +25,6 @@ public class PessoaController {
     @Autowired
     private PessoaService service;
 
-    @Autowired
-    private EntityLinks links;
-
     @GetMapping(value = "/pessoas", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Pessoa> listAllPessoas() {
         return service.listarTodos();
